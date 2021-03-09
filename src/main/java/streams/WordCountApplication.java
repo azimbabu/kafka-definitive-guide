@@ -16,26 +16,26 @@ import java.util.Properties;
 /**
  * Create topics if not created already :
  *
- * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-plaintext-input
+ * <p>bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1
+ * --partitions 1 --topic streams-plaintext-input
  *
- * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic streams-wordcount-output --config cleanup.policy=compact
+ * <p>bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1
+ * --partitions 1 --topic streams-wordcount-output --config cleanup.policy=compact
  *
- * Run producer from command line :
+ * <p>Run producer from command line :
  *
- * bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic streams-plaintext-input
+ * <p>bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic
+ * streams-plaintext-input
  *
- * Run consumer from command line :
+ * <p>Run consumer from command line :
  *
- * bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
- --topic streams-wordcount-output \
- --from-beginning \
- --formatter kafka.tools.DefaultMessageFormatter \
- --property print.key=true \
- --property print.value=true \
- --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
- --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
+ * <p>bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \ --topic
+ * streams-wordcount-output \ --from-beginning \ --formatter kafka.tools.DefaultMessageFormatter \
+ * --property print.key=true \ --property print.value=true \ --property
+ * key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \ --property
+ * value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
  *
- * Then run the main method of WordCountApplication class
+ * <p>Then run the main method of WordCountApplication class
  */
 public class WordCountApplication {
 

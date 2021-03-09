@@ -10,30 +10,27 @@ import java.util.List;
 import java.util.Map;
 
 public class BananaPartitioner implements Partitioner {
-    @Override
-    public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
-        List<PartitionInfo> partitions = cluster.partitionsForTopic(topic);
-        int numPartitions = partitions.size();
+  @Override
+  public int partition(
+      String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
+    List<PartitionInfo> partitions = cluster.partitionsForTopic(topic);
+    int numPartitions = partitions.size();
 
-        if (keyBytes == null || !(key instanceof String)) {
-            throw new InvalidRecordException("We expect all messages to have customer name as key");
-        }
-
-        if (((String) key).equals("Banana")) {
-            return numPartitions - 1;   // Banana will always go to last partition
-        } else {
-            // Other records will get hashed to the rest of the partitions
-            return Math.abs(Utils.murmur2(keyBytes)) % (numPartitions-1);
-        }
+    if (keyBytes == null || !(key instanceof String)) {
+      throw new InvalidRecordException("We expect all messages to have customer name as key");
     }
 
-    @Override
-    public void close() {
-
+    if (((String) key).equals("Banana")) {
+      return numPartitions - 1; // Banana will always go to last partition
+    } else {
+      // Other records will get hashed to the rest of the partitions
+      return Math.abs(Utils.murmur2(keyBytes)) % (numPartitions - 1);
     }
+  }
 
-    @Override
-    public void configure(Map<String, ?> map) {
+  @Override
+  public void close() {}
 
-    }
+  @Override
+  public void configure(Map<String, ?> map) {}
 }

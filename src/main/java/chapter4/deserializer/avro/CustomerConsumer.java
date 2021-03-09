@@ -13,30 +13,37 @@ import java.util.Properties;
 
 public class CustomerConsumer {
 
-    public static void main(String[] args) {
-        Properties properties = new Properties();
-        properties.put("bootstrap.servers", "localhost:9092");
-        properties.put("group.id", "CountryCounter");
-        properties.put("key.deserializer", StringDeserializer.class.getName());
-        properties.put("value.deserializer", KafkaAvroDeserializer.class.getName());
-        properties.put("specific.avro.reader", "true");
-        properties.put("schema.registry.url", "http://localhost:8081");
+  public static void main(String[] args) {
+    Properties properties = new Properties();
+    properties.put("bootstrap.servers", "localhost:9092");
+    properties.put("group.id", "CountryCounter");
+    properties.put("key.deserializer", StringDeserializer.class.getName());
+    properties.put("value.deserializer", KafkaAvroDeserializer.class.getName());
+    properties.put("specific.avro.reader", "true");
+    properties.put("schema.registry.url", "http://localhost:8081");
 
-        String topic = "customerContacts";
+    String topic = "customerContacts";
 
-        try (KafkaConsumer<String, Customer> consumer = new KafkaConsumer<>(properties)) {
-            consumer.subscribe(Collections.singletonList(topic));
-            System.out.println("Reading topic:" + topic);
+    try (KafkaConsumer<String, Customer> consumer = new KafkaConsumer<>(properties)) {
+      consumer.subscribe(Collections.singletonList(topic));
+      System.out.println("Reading topic:" + topic);
 
-            while (true) {
-                ConsumerRecords<String, Customer> records = consumer.poll(Duration.ofMillis(100));
-                for (ConsumerRecord<String, Customer> record : records) {
-                    Customer customer = record.value();
-                    System.out.println(String.format("topic = %s, partition = %d, offset = %d, key = %s, customer id = %s, customer name = %s",
-                            record.topic(), record.partition(), record.offset(), record.key(), customer.getId(), customer.getName()));
-                }
-                consumer.commitSync();
-            }
+      while (true) {
+        ConsumerRecords<String, Customer> records = consumer.poll(Duration.ofMillis(100));
+        for (ConsumerRecord<String, Customer> record : records) {
+          Customer customer = record.value();
+          System.out.println(
+              String.format(
+                  "topic = %s, partition = %d, offset = %d, key = %s, customer id = %s, customer name = %s",
+                  record.topic(),
+                  record.partition(),
+                  record.offset(),
+                  record.key(),
+                  customer.getId(),
+                  customer.getName()));
         }
+        consumer.commitSync();
+      }
     }
+  }
 }
